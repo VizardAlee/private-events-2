@@ -1,6 +1,12 @@
 <h1>All Events</h1>
 
 <% if user_signed_in? %>
+  <ul>
+    <% @events.each do |event| %>
+      <li><%= link_to event.title, event_path(event) %></li>
+    <% end %>
+  </ul>
+  <%= link_to 'Create Event', new_event_path %>
   <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
 <% else %>
   <%= link_to "Login", new_user_session_path %>

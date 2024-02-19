@@ -1,15 +1,19 @@
 class EventsController < ApplicationController
+  before_action :authenticate_user!, except: [:index]
+
   def new
     @event = Event.new
   end
 
   def create
-    @event = Event.new(event_params)
+    puts params.inspect
+
+    @event = current_user.created_events.new(event_params)
 
     if @event.save
-      redirect_to @events
+      redirect_to events_path
     else
-      render new, status: :unprocessable_entity
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -24,6 +28,6 @@ class EventsController < ApplicationController
   private
 
   def event_params
-    require(:event).permit(:title, :location, :date, :time)
+    params.require(:event).permit(:title, :location, :date, :time)
   end
 end
